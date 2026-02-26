@@ -5,11 +5,11 @@ namespace App\Helpers;
 class CurrencyHelper
 {
     protected static array $currencies = [
-        'USD' => ['symbol' => '$', 'name' => 'US Dollar', 'position' => 'before'],
-        'EUR' => ['symbol' => '€', 'name' => 'Euro', 'position' => 'before'],
-        'GBP' => ['symbol' => '£', 'name' => 'British Pound', 'position' => 'before'],
-        'CAD' => ['symbol' => '$', 'name' => 'Canadian Dollar', 'position' => 'before'],
-        'AUD' => ['symbol' => '$', 'name' => 'Australian Dollar', 'position' => 'before'],
+        'USD' => ['symbol' => 'R', 'name' => 'US Dollar', 'position' => 'before'],
+        'EUR' => ['symbol' => 'R', 'name' => 'Euro', 'position' => 'before'],
+        'GBP' => ['symbol' => 'R', 'name' => 'British Pound', 'position' => 'before'],
+        'CAD' => ['symbol' => 'R', 'name' => 'Canadian Dollar', 'position' => 'before'],
+        'AUD' => ['symbol' => 'R', 'name' => 'Australian Dollar', 'position' => 'before'],
         'ZAR' => ['symbol' => 'R', 'name' => 'South African Rand', 'position' => 'before'],
     ];
 
