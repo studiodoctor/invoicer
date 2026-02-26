@@ -11,8 +11,8 @@
     <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
         <div class="flex flex-1"></div>
         <div class="flex items-center gap-x-4 lg:gap-x-6">
-            <!-- Profile dropdown -->
-            <div class="relative" x-data="{ open: false }">                <button type="button" 
+            <div class="relative" x-data="{ open: false }">
+                <button type="button" 
                         class="-m-1.5 flex items-center p-1.5"
                         @click="open = !open">
                     <span class="sr-only">Open user menu</span>
@@ -28,12 +28,7 @@
 
                 <div x-show="open" 
                      @click.away="open = false"
-                     x-transition:enter="transition ease-out duration-100"
-                     x-transition:enter-start="transform opacity-0 scale-95"
-                     x-transition:enter-end="transform opacity-100 scale-100"
-                     x-transition:leave="transition ease-in duration-75"
-                     x-transition:leave-start="transform opacity-100 scale-100"
-                     x-transition:leave-end="transform opacity-0 scale-95"
+                     x-transition
                      class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                      x-cloak>
                     <a href="{{ route('settings.index') }}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50">Settings</a>

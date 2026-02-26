@@ -57,7 +57,6 @@
         </div>
 
         <div class="lg:pl-72">
-            <!-- Top header -->
             @include('components.header')
 
             <main class="py-6">

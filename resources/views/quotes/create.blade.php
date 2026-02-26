@@ -1,31 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'Create Invoice')
+@section('title', 'Create Quote')
 
 @section('content')
-<div x-data="invoiceForm()">
+<div x-data="quoteForm()">
     <div class="md:flex md:items-center md:justify-between mb-6">
-        <h2 class="text-2xl font-bold leading-7 text-gray-900">Create Invoice</h2>
+        <h2 class="text-2xl font-bold leading-7 text-gray-900">Create Quote</h2>
     </div>
 
-    <form action="{{ route('invoices.store') }}" method="POST">
+    <form action="{{ route('quotes.store') }}" method="POST">
         @csrf
         <div class="space-y-6">
             <div class="bg-white shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-base font-semibold leading-6 text-gray-900 mb-4">Invoice Details</h3>
+                    <h3 class="text-base font-semibold leading-6 text-gray-900 mb-4">Quote Details</h3>
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                         <div class="sm:col-span-2">
                             <label for="client_id" class="block text-sm font-medium text-gray-900">Client *</label>
                             <select name="client_id" id="client_id" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm">
                                 <option value="">Select a client</option>
                                 @foreach($clients as $client)
-                                <option value="{{ $client->id }}" {{ request('client_id') == $client->id ? 'selected' : '' }}>{{ $client->company_name }}</option>
+                                <option value="{{ $client->id }}">{{ $client->company_name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="sm:col-span-2">
-                            <label for="reference" class="block text-sm font-medium text-gray-900">Reference / PO Number</label>
+                            <label for="reference" class="block text-sm font-medium text-gray-900">Reference</label>
                             <input type="text" name="reference" id="reference" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
                         </div>
                         <div>
@@ -33,8 +33,8 @@
                             <input type="date" name="issue_date" id="issue_date" value="{{ now()->format('Y-m-d') }}" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
                         </div>
                         <div>
-                            <label for="due_date" class="block text-sm font-medium text-gray-900">Due Date *</label>
-                            <input type="date" name="due_date" id="due_date" value="{{ now()->addDays($settings->invoice_due_days)->format('Y-m-d') }}" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
+                            <label for="expiry_date" class="block text-sm font-medium text-gray-900">Expiry Date *</label>
+                            <input type="date" name="expiry_date" id="expiry_date" value="{{ now()->addDays($settings->quote_validity_days)->format('Y-m-d') }}" required class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
                         </div>
                         <div>
                             <label for="currency" class="block text-sm font-medium text-gray-900">Currency</label>
@@ -106,23 +106,19 @@
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
                         <div>
                             <label for="notes" class="block text-sm font-medium text-gray-900">Notes</label>
-                            <textarea name="notes" id="notes" rows="4" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">{{ $settings->default_invoice_notes }}</textarea>
+                            <textarea name="notes" id="notes" rows="4" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">{{ $settings->default_quote_notes }}</textarea>
                         </div>
                         <div>
                             <label for="terms" class="block text-sm font-medium text-gray-900">Terms & Conditions</label>
-                            <textarea name="terms" id="terms" rows="4" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">{{ $settings->default_invoice_terms }}</textarea>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label for="payment_instructions" class="block text-sm font-medium text-gray-900">Payment Instructions</label>
-                            <textarea name="payment_instructions" id="payment_instructions" rows="3" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">{{ $settings->payment_instructions }}</textarea>
+                            <textarea name="terms" id="terms" rows="4" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">{{ $settings->default_quote_terms }}</textarea>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end gap-3">
-                <a href="{{ route('invoices.index') }}" class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</a>
-                <button type="submit" class="inline-flex justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">Create Invoice</button>
+                <a href="{{ route('quotes.index') }}" class="inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</a>
+                <button type="submit" class="inline-flex justify-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">Create Quote</button>
             </div>
         </div>
     </form>
@@ -131,7 +127,7 @@
 
 @push('scripts')
 <script>
-function invoiceForm() {
+function quoteForm() {
     return {
         currency: '{{ $settings->default_currency }}',
         taxRate: {{ $settings->default_tax_rate }},

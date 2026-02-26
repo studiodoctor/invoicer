@@ -23,11 +23,7 @@
     <div class="bg-white rounded-lg shadow p-4">
         <form method="GET" class="flex flex-wrap gap-4">
             <div class="flex-1 min-w-[200px]">
-                <input type="text" 
-                       name="search" 
-                       value="{{ request('search') }}"
-                       placeholder="Search clients..."
-                       class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search clients..." class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6">
             </div>
             <div>
                 <select name="status" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6">
@@ -36,13 +32,9 @@
                     <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
-            <button type="submit" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                Filter
-            </button>
+            <button type="submit" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Filter</button>
             @if(request()->hasAny(['search', 'status']))
-            <a href="{{ route('clients.index') }}" class="inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900">
-                Clear
-            </a>
+            <a href="{{ route('clients.index') }}" class="inline-flex items-center rounded-md px-3 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900">Clear</a>
             @endif
         </form>
     </div>
@@ -57,9 +49,7 @@
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Quotes</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Invoices</th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                        <span class="sr-only">Actions</span>
-                    </th>
+                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6"><span class="sr-only">Actions</span></th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200 bg-white">
@@ -69,16 +59,12 @@
                         <div class="flex items-center">
                             <div class="h-10 w-10 flex-shrink-0">
                                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary-100">
-                                    <span class="text-sm font-medium leading-none text-primary-700">
-                                        {{ strtoupper(substr($client->company_name, 0, 2)) }}
-                                    </span>
+                                    <span class="text-sm font-medium leading-none text-primary-700">{{ strtoupper(substr($client->company_name, 0, 2)) }}</span>
                                 </span>
                             </div>
                             <div class="ml-4">
                                 <div class="font-medium text-gray-900">
-                                    <a href="{{ route('clients.show', $client) }}" class="hover:text-primary-600">
-                                        {{ $client->company_name }}
-                                    </a>
+                                    <a href="{{ route('clients.show', $client) }}" class="hover:text-primary-600">{{ $client->company_name }}</a>
                                 </div>
                                 @if($client->contact_name)
                                 <div class="text-gray-500">{{ $client->contact_name }}</div>
@@ -92,12 +78,8 @@
                         <div>{{ $client->phone }}</div>
                         @endif
                     </td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {{ $client->quotes_count }}
-                    </td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {{ $client->invoices_count }}
-                    </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $client->quotes_count }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $client->invoices_count }}</td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm">
                         @if($client->is_active)
                         <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">Active</span>
@@ -118,12 +100,7 @@
                         <h3 class="mt-2 text-sm font-semibold text-gray-900">No clients</h3>
                         <p class="mt-1 text-sm text-gray-500">Get started by creating a new client.</p>
                         <div class="mt-6">
-                            <a href="{{ route('clients.create') }}" class="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">
-                                <svg class="-ml-0.5 mr-1.5 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
-                                </svg>
-                                Add Client
-                            </a>
+                            <a href="{{ route('clients.create') }}" class="inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">Add Client</a>
                         </div>
                     </td>
                 </tr>
@@ -132,9 +109,7 @@
         </table>
 
         @if($clients->hasPages())
-        <div class="border-t border-gray-200 px-4 py-3 sm:px-6">
-            {{ $clients->links() }}
-        </div>
+        <div class="border-t border-gray-200 px-4 py-3 sm:px-6">{{ $clients->links() }}</div>
         @endif
     </div>
 </div>

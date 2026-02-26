@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Page header -->
     <div class="md:flex md:items-center md:justify-between">
         <div class="min-w-0 flex-1">
             <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
@@ -23,7 +22,6 @@
 
     <!-- Stats cards -->
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <!-- Total Revenue -->
         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
             <dt class="truncate text-sm font-medium text-gray-500">Total Revenue</dt>
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
@@ -31,7 +29,6 @@
             </dd>
         </div>
 
-        <!-- Pending Invoices -->
         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
             <dt class="truncate text-sm font-medium text-gray-500">Pending Invoices</dt>
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
@@ -42,7 +39,6 @@
             </dd>
         </div>
 
-        <!-- Overdue Invoices -->
         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
             <dt class="truncate text-sm font-medium text-gray-500">Overdue Invoices</dt>
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-red-600">
@@ -53,7 +49,6 @@
             </dd>
         </div>
 
-        <!-- Quote Conversion Rate -->
         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
             <dt class="truncate text-sm font-medium text-gray-500">Quote Conversion</dt>
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
@@ -67,7 +62,6 @@
 
     <!-- Charts -->
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <!-- Revenue Chart -->
         <div class="overflow-hidden rounded-lg bg-white p-6 shadow">
             <h3 class="text-base font-semibold leading-6 text-gray-900">Revenue Overview</h3>
             <div class="mt-4" style="height: 300px;">
@@ -75,7 +69,6 @@
             </div>
         </div>
 
-        <!-- Status Charts -->
         <div class="grid grid-cols-2 gap-5">
             <div class="overflow-hidden rounded-lg bg-white p-6 shadow">
                 <h3 class="text-base font-semibold leading-6 text-gray-900">Invoice Status</h3>
@@ -94,7 +87,6 @@
 
     <!-- Recent Items -->
     <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <!-- Recent Invoices -->
         <div class="overflow-hidden rounded-lg bg-white shadow">
             <div class="p-6">
                 <div class="flex items-center justify-between">
@@ -126,7 +118,6 @@
             </div>
         </div>
 
-        <!-- Recent Quotes -->
         <div class="overflow-hidden rounded-lg bg-white shadow">
             <div class="p-6">
                 <div class="flex items-center justify-between">
@@ -158,50 +149,12 @@
             </div>
         </div>
     </div>
-
-    <!-- Top Clients -->
-    <div class="overflow-hidden rounded-lg bg-white shadow">
-        <div class="p-6">
-            <h3 class="text-base font-semibold leading-6 text-gray-900">Top Clients by Revenue</h3>
-            <div class="mt-6">
-                <table class="min-w-full divide-y divide-gray-300">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Client</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-                            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Total Revenue</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @forelse($topClients as $client)
-                        <tr>
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                <a href="{{ route('clients.show', $client) }}" class="hover:text-primary-600">
-                                    {{ $client->company_name }}
-                                </a>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $client->email }}</td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-right font-medium">
-                                ${{ number_format($client->total_revenue ?? 0, 2) }}
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="py-4 text-center text-sm text-gray-500">No clients yet</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Revenue Chart
     const revenueCtx = document.getElementById('revenueChart').getContext('2d');
     new Chart(revenueCtx, {
         type: 'line',
@@ -219,25 +172,16 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
+            plugins: { legend: { display: false } },
             scales: {
                 y: {
                     beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
-                        }
-                    }
+                    ticks: { callback: function(value) { return '$' + value.toLocaleString(); } }
                 }
             }
         }
     });
 
-    // Invoice Status Chart
     const invoiceStatusCtx = document.getElementById('invoiceStatusChart').getContext('2d');
     new Chart(invoiceStatusCtx, {
         type: 'doughnut',
@@ -251,19 +195,10 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        boxWidth: 12,
-                        padding: 8
-                    }
-                }
-            }
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } }
         }
     });
 
-    // Quote Status Chart
     const quoteStatusCtx = document.getElementById('quoteStatusChart').getContext('2d');
     new Chart(quoteStatusCtx, {
         type: 'doughnut',
@@ -277,15 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        boxWidth: 12,
-                        padding: 8
-                    }
-                }
-            }
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } }
         }
     });
 });
