@@ -135,7 +135,7 @@ function quoteForm() {
         get total() { return this.subtotal + this.taxAmount; },
         addItem() { this.items.push({ description: '', quantity: 1, unit_price: 0 }); },
         removeItem(index) { if (this.items.length > 1) this.items.splice(index, 1); },
-        formatCurrency(amount) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: this.currency }).format(amount || 0); }
+        formatCurrency(amount) { return new Intl.NumberFormat('en-ZA', { style: 'currency', currency: this.currency }).format(amount || 0); }
     }
 }
 </script>
