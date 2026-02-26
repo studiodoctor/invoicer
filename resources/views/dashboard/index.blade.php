@@ -20,12 +20,16 @@
         </div>
     </div>
 
+    @php
+        $defaultCurrency = auth()->user()->settings->default_currency ?? 'ZAR';
+    @endphp
+
     <!-- Stats cards -->
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
             <dt class="truncate text-sm font-medium text-gray-500">Total Revenue</dt>
             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">
-                ${{ number_format($stats['total_revenue'], 2) }}
+                {{ format_currency($stats['total_revenue'], $defaultCurrency) }}
             </dd>
         </div>
 
@@ -35,7 +39,7 @@
                 {{ $stats['pending_invoices']['count'] }}
             </dd>
             <dd class="mt-1 text-sm text-gray-500">
-                ${{ number_format($stats['pending_invoices']['total'], 2) }} outstanding
+                {{ format_currency($stats['pending_invoices']['total'], $defaultCurrency) }} outstanding
             </dd>
         </div>
 
@@ -45,7 +49,7 @@
                 {{ $stats['overdue_invoices']['count'] }}
             </dd>
             <dd class="mt-1 text-sm text-gray-500">
-                ${{ number_format($stats['overdue_invoices']['total'], 2) }} overdue
+                {{ format_currency($stats['overdue_invoices']['total'], $defaultCurrency) }} overdue
             </dd>
         </div>
 
@@ -105,7 +109,7 @@
                                     <p class="truncate text-sm text-gray-500">{{ $invoice->client->company_name }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">${{ number_format($invoice->total, 2) }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ format_currency($invoice->total, $invoice->currency) }}</p>
                                     @include('components.status-badge', ['status' => $invoice->status])
                                 </div>
                             </div>
@@ -136,7 +140,7 @@
                                     <p class="truncate text-sm text-gray-500">{{ $quote->client->company_name }}</p>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">${{ number_format($quote->total, 2) }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ format_currency($quote->total, $quote->currency) }}</p>
                                     @include('components.status-badge', ['status' => $quote->status, 'type' => 'quote'])
                                 </div>
                             </div>
@@ -149,72 +153,115 @@
             </div>
         </div>
     </div>
+
+    <!-- Top Clients -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-6">
+            <h3 class="text-base font-semibold leading-6 text-gray-900">Top Clients by Revenue</h3>
+            <div class="mt-6">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Client</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                            <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900">Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($topClients as $client)
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                <a href="{{ route('clients.show', $client) }}" class="hover:text-primary-600">
+                                    {{ $client->company_name }}
+                                </a>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $client->email }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-right font-medium">
+                                {{ format_currency($client->total_revenue ?? 0, $defaultCurrency) }}
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="py-4 text-center text-sm text-gray-500">No clients yet</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-    new Chart(revenueCtx, {
-        type: 'line',
-        data: {
-            labels: @json($revenueChart['labels']),
-            datasets: [{
-                label: 'Revenue',
-                data: @json($revenueChart['data']),
-                borderColor: '#0ea5e9',
-                backgroundColor: 'rgba(14, 165, 233, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { callback: function(value) { return '$' + value.toLocaleString(); } }
+    const revenueCtx = document.getElementById('revenueChart');
+    if (revenueCtx) {
+        new Chart(revenueCtx.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: @json($revenueChart['labels'] ?? []),
+                datasets: [{
+                    label: 'Revenue',
+                    data: @json($revenueChart['data'] ?? []),
+                    borderColor: '#0ea5e9',
+                    backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: function(value) { return 'R' + value.toLocaleString(); } }
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
-    const invoiceStatusCtx = document.getElementById('invoiceStatusChart').getContext('2d');
-    new Chart(invoiceStatusCtx, {
-        type: 'doughnut',
-        data: {
-            labels: @json($invoiceStatusChart['labels']),
-            datasets: [{
-                data: @json($invoiceStatusChart['data']),
-                backgroundColor: @json($invoiceStatusChart['colors'])
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } }
-        }
-    });
+    const invoiceStatusCtx = document.getElementById('invoiceStatusChart');
+    if (invoiceStatusCtx && @json($invoiceStatusChart['data'] ?? []).length > 0) {
+        new Chart(invoiceStatusCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: @json($invoiceStatusChart['labels'] ?? []),
+                datasets: [{
+                    data: @json($invoiceStatusChart['data'] ?? []),
+                    backgroundColor: @json($invoiceStatusChart['colors'] ?? [])
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } }
+            }
+        });
+    }
 
-    const quoteStatusCtx = document.getElementById('quoteStatusChart').getContext('2d');
-    new Chart(quoteStatusCtx, {
-        type: 'doughnut',
-        data: {
-            labels: @json($quoteStatusChart['labels']),
-            datasets: [{
-                data: @json($quoteStatusChart['data']),
-                backgroundColor: @json($quoteStatusChart['colors'])
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } }
-        }
-    });
+    const quoteStatusCtx = document.getElementById('quoteStatusChart');
+    if (quoteStatusCtx && @json($quoteStatusChart['data'] ?? []).length > 0) {
+        new Chart(quoteStatusCtx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: @json($quoteStatusChart['labels'] ?? []),
+                datasets: [{
+                    data: @json($quoteStatusChart['data'] ?? []),
+                    backgroundColor: @json($quoteStatusChart['colors'] ?? [])
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 8 } } }
+            }
+        });
+    }
 });
 </script>
 @endpush
