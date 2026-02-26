@@ -151,7 +151,7 @@ class DashboardService
         $colors = [];
 
         foreach ($statuses as $status) {
-            $statusEnum = InvoiceStatus::tryFrom($status->status);
+            $statusEnum = InvoiceStatus::tryFrom((string) $status->status);
             if ($statusEnum) {
                 $labels[] = $statusEnum->label();
                 $data[] = (int) $status->count;
