@@ -20,8 +20,12 @@
         </div>
     </div>
 
-    @php
+    <!-- @php
         $defaultCurrency = auth()->user()->settings->default_currency ?? 'ZAR';
+    @endphp -->
+
+    @php
+        $defaultCurrency = 'ZAR';
     @endphp
 
     <!-- Stats cards -->
