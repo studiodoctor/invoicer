@@ -66,7 +66,7 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $invoice->load(['client', 'items', 'payments', 'quote']);
 
@@ -75,9 +75,9 @@ class InvoiceController extends Controller
 
     public function edit(Invoice $invoice)
     {
-        $this->authorize('update', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
-        if (!in_array($invoice->status, [InvoiceStatus::DRAFT])) {
+        if ($invoice->status !== InvoiceStatus::DRAFT) {
             return redirect()
                 ->route('invoices.show', $invoice)
                 ->with('error', 'This invoice cannot be edited.');
@@ -96,7 +96,7 @@ class InvoiceController extends Controller
 
     public function update(InvoiceRequest $request, Invoice $invoice)
     {
-        $this->authorize('update', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $invoice = $this->invoiceService->update($invoice, $request->validated());
 
@@ -107,7 +107,7 @@ class InvoiceController extends Controller
 
     public function destroy(Invoice $invoice)
     {
-        $this->authorize('delete', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $invoice->delete();
 
@@ -120,7 +120,7 @@ class InvoiceController extends Controller
 
     public function send(Invoice $invoice)
     {
-        $this->authorize('update', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         Mail::to($invoice->client->email)->send(new InvoiceMail($invoice));
 
@@ -135,7 +135,7 @@ class InvoiceController extends Controller
 
     public function pdf(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $pdf = $this->pdfService->generateInvoicePdf($invoice);
 
@@ -144,7 +144,7 @@ class InvoiceController extends Controller
 
     public function preview(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $pdf = $this->pdfService->generateInvoicePdf($invoice);
 
@@ -153,7 +153,7 @@ class InvoiceController extends Controller
 
     public function receipt(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         if ($invoice->status !== InvoiceStatus::PAID) {
             return redirect()
@@ -168,7 +168,7 @@ class InvoiceController extends Controller
 
     public function duplicate(Invoice $invoice)
     {
-        $this->authorize('view', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $newInvoice = $this->invoiceService->duplicate($invoice);
 
@@ -179,7 +179,7 @@ class InvoiceController extends Controller
 
     public function recordPayment(Request $request, Invoice $invoice)
     {
-        $this->authorize('update', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $request->validate([
             'amount' => 'required|numeric|min:0.01|max:' . $invoice->amount_due,
@@ -207,7 +207,7 @@ class InvoiceController extends Controller
 
     public function markAsPaid(Invoice $invoice)
     {
-        $this->authorize('update', $invoice);
+        abort_if($invoice->user_id !== auth()->id(), 403);
 
         $invoice->recordPayment(
             $invoice->amount_due,

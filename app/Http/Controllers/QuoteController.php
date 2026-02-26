@@ -66,7 +66,7 @@ class QuoteController extends Controller
 
     public function show(Quote $quote)
     {
-        $this->authorize('view', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         $quote->load(['client', 'items', 'convertedInvoice']);
 
@@ -75,9 +75,9 @@ class QuoteController extends Controller
 
     public function edit(Quote $quote)
     {
-        $this->authorize('update', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
-        if (!in_array($quote->status, [QuoteStatus::DRAFT])) {
+        if ($quote->status !== QuoteStatus::DRAFT) {
             return redirect()
                 ->route('quotes.show', $quote)
                 ->with('error', 'This quote cannot be edited.');
@@ -96,7 +96,7 @@ class QuoteController extends Controller
 
     public function update(QuoteRequest $request, Quote $quote)
     {
-        $this->authorize('update', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         $quote = $this->quoteService->update($quote, $request->validated());
 
@@ -107,7 +107,7 @@ class QuoteController extends Controller
 
     public function destroy(Quote $quote)
     {
-        $this->authorize('delete', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         $quote->delete();
 
@@ -120,7 +120,7 @@ class QuoteController extends Controller
 
     public function send(Quote $quote)
     {
-        $this->authorize('update', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         Mail::to($quote->client->email)->send(new QuoteMail($quote));
 
@@ -135,7 +135,7 @@ class QuoteController extends Controller
 
     public function pdf(Quote $quote)
     {
-        $this->authorize('view', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         $pdf = $this->pdfService->generateQuotePdf($quote);
 
@@ -144,7 +144,7 @@ class QuoteController extends Controller
 
     public function preview(Quote $quote)
     {
-        $this->authorize('view', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         $pdf = $this->pdfService->generateQuotePdf($quote);
 
@@ -153,7 +153,7 @@ class QuoteController extends Controller
 
     public function duplicate(Quote $quote)
     {
-        $this->authorize('view', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         $newQuote = $this->quoteService->duplicate($quote);
 
@@ -164,7 +164,7 @@ class QuoteController extends Controller
 
     public function convert(Quote $quote)
     {
-        $this->authorize('update', $quote);
+        abort_if($quote->user_id !== auth()->id(), 403);
 
         if (!$quote->can_be_converted) {
             return redirect()
@@ -179,7 +179,7 @@ class QuoteController extends Controller
             ->with('success', 'Quote converted to invoice successfully.');
     }
 
-    // Public signing page
+    // Public signing page - no auth required
     public function sign(string $token)
     {
         $quote = Quote::where('sign_token', $token)
@@ -193,7 +193,6 @@ class QuoteController extends Controller
             ]);
         }
 
-        // Mark as viewed
         $quote->markAsViewed();
 
         $settings = $quote->user->settings;

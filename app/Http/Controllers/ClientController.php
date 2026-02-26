@@ -48,7 +48,10 @@ class ClientController extends Controller
 
     public function show(Client $client)
     {
-        $this->authorize('view', $client);
+        // Check ownership
+        if ($client->user_id !== auth()->id()) {
+            abort(403);
+        }
 
         $client->load(['quotes' => function ($q) {
             $q->latest()->limit(5);
@@ -61,14 +64,18 @@ class ClientController extends Controller
 
     public function edit(Client $client)
     {
-        $this->authorize('update', $client);
+        if ($client->user_id !== auth()->id()) {
+            abort(403);
+        }
 
         return view('clients.edit', compact('client'));
     }
 
     public function update(ClientRequest $request, Client $client)
     {
-        $this->authorize('update', $client);
+        if ($client->user_id !== auth()->id()) {
+            abort(403);
+        }
 
         $client->update($request->validated());
 
@@ -81,7 +88,9 @@ class ClientController extends Controller
 
     public function destroy(Client $client)
     {
-        $this->authorize('delete', $client);
+        if ($client->user_id !== auth()->id()) {
+            abort(403);
+        }
 
         $client->delete();
 
