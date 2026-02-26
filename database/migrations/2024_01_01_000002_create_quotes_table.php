@@ -34,7 +34,8 @@ return new class extends Migration
             $table->string('signer_name')->nullable();
             $table->timestamp('sent_at')->nullable();
             $table->timestamp('viewed_at')->nullable();
-            $table->foreignId('converted_invoice_id')->nullable()->constrained('invoices')->nullOnDelete();
+            // NO FOREIGN KEY HERE - just the column
+            $table->unsignedBigInteger('converted_invoice_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

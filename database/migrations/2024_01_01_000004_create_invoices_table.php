@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            // Reference quotes table - this is OK because quotes exists
             $table->foreignId('quote_id')->nullable()->constrained()->nullOnDelete();
             $table->string('invoice_number')->unique();
             $table->string('reference')->nullable();
