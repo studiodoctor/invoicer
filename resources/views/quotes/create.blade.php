@@ -39,9 +39,12 @@
                         <div>
                             <label for="currency" class="block text-sm font-medium text-gray-900">Currency</label>
                             <select name="currency" id="currency" x-model="currency" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 sm:text-sm">
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                                <option value="AUD">AUD - Australian Dollar</option>
+                                <option value="ZAR">ZAR - South African Rand</option>
                             </select>
                         </div>
                         <div>
@@ -137,7 +140,7 @@ function quoteForm() {
         get total() { return this.subtotal + this.taxAmount; },
         addItem() { this.items.push({ description: '', quantity: 1, unit_price: 0 }); },
         removeItem(index) { if (this.items.length > 1) this.items.splice(index, 1); },
-        formatCurrency(amount) { return new Intl.NumberFormat('en-US', { style: 'currency', currency: this.currency }).format(amount || 0); }
+        formatCurrency(amount) { return new Intl.NumberFormat('en-ZA', { style: 'currency', currency: this.currency }).format(amount || 0); }
     }
 }
 </script>

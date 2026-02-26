@@ -98,11 +98,12 @@
                     <div>
                         <label for="default_currency" class="block text-sm font-medium leading-6 text-gray-900">Default Currency</label>
                         <select name="default_currency" id="default_currency" class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-600 sm:text-sm sm:leading-6">
-                            <option value="USD" {{ $settings->default_currency === 'USD' ? 'selected' : '' }}>USD</option>
-                            <option value="EUR" {{ $settings->default_currency === 'EUR' ? 'selected' : '' }}>EUR</option>
-                            <option value="GBP" {{ $settings->default_currency === 'GBP' ? 'selected' : '' }}>GBP</option>
-                            <option value="CAD" {{ $settings->default_currency === 'CAD' ? 'selected' : '' }}>CAD</option>
-                            <option value="AUD" {{ $settings->default_currency === 'AUD' ? 'selected' : '' }}>AUD</option>
+                            <option value="USD" {{ $settings->default_currency === 'USD' ? 'selected' : '' }}>USD - US Dollar</option>
+                            <option value="EUR" {{ $settings->default_currency === 'EUR' ? 'selected' : '' }}>EUR - Euro</option>
+                            <option value="GBP" {{ $settings->default_currency === 'GBP' ? 'selected' : '' }}>GBP - British Pound</option>
+                            <option value="CAD" {{ $settings->default_currency === 'CAD' ? 'selected' : '' }}>CAD - Canadian Dollar</option>
+                            <option value="AUD" {{ $settings->default_currency === 'AUD' ? 'selected' : '' }}>AUD - Australian Dollar</option>
+                            <option value="ZAR" {{ $settings->default_currency === 'ZAR' ? 'selected' : '' }}>ZAR - South African Rand</option>
                         </select>
                     </div>
 
