@@ -76,7 +76,7 @@
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $quote->issue_date->format('M d, Y') }}</td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ $quote->expiry_date->format('M d, Y') }}</td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-right font-medium">${{ number_format($quote->total, 2) }}</td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-right font-medium">R{{ number_format($quote->total, 2) }}</td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm">@include('components.status-badge', ['status' => $quote->status])</td>
                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                         <a href="{{ route('quotes.show', $quote) }}" class="text-primary-600 hover:text-primary-900">View</a>

@@ -34,7 +34,7 @@
         </div>
 
         <div class="total-row">
-            <table style="width: 100%;"><tr><td>Amount Paid</td><td style="text-align: right;">${{ number_format($invoice->total, 2) }} {{ $invoice->currency }}</td></tr></table>
+            <table style="width: 100%;"><tr><td>Amount Paid</td><td style="text-align: right;">R{{ number_format($invoice->total, 2) }} {{ $invoice->currency }}</td></tr></table>
         </div>
 
         <div style="margin-top: 40px; text-align: center; color: #6b7280; font-size: 11px;">

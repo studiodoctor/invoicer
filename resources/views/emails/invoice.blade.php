@@ -26,7 +26,7 @@
                 <tr><td style="padding: 8px 0; color: #6b7280;">Invoice Number:</td><td style="text-align: right;"><strong>{{ $invoice->invoice_number }}</strong></td></tr>
                 <tr><td style="padding: 8px 0; color: #6b7280;">Issue Date:</td><td style="text-align: right;">{{ $invoice->issue_date->format('M d, Y') }}</td></tr>
                 <tr><td style="padding: 8px 0; color: #6b7280;">Due Date:</td><td style="text-align: right;">{{ $invoice->due_date->format('M d, Y') }}</td></tr>
-                <tr><td style="padding: 8px 0; color: #6b7280;">Amount Due:</td><td style="text-align: right;"><strong style="font-size: 18px; color: #0284c7;">${{ number_format($invoice->amount_due, 2) }}</strong></td></tr>
+                <tr><td style="padding: 8px 0; color: #6b7280;">Amount Due:</td><td style="text-align: right;"><strong style="font-size: 18px; color: #0284c7;">R{{ number_format($invoice->amount_due, 2) }}</strong></td></tr>
             </table>
         </div>
 

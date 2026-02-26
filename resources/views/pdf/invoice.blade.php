@@ -102,8 +102,8 @@
                 <tr>
                     <td><div style="font-weight: 500; color: #111827;">{{ $item->description }}</div>@if($item->details)<div style="font-size: 11px; color: #6b7280; margin-top: 4px;">{{ $item->details }}</div>@endif</td>
                     <td style="text-align: center;">{{ number_format($item->quantity, 2) }}</td>
-                    <td style="text-align: right;">${{ number_format($item->unit_price, 2) }}</td>
-                    <td style="text-align: right; font-weight: 500;">${{ number_format($item->total, 2) }}</td>
+                    <td style="text-align: right;">R{{ number_format($item->unit_price, 2) }}</td>
+                    <td style="text-align: right; font-weight: 500;">R{{ number_format($item->total, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -111,12 +111,12 @@
 
         <div class="totals">
             <table style="width: 100%;">
-                <tr class="totals-row"><td>Subtotal</td><td style="text-align: right;">${{ number_format($invoice->subtotal, 2) }}</td></tr>
-                @if($invoice->discount_amount > 0)<tr class="totals-row"><td>Discount</td><td style="text-align: right;">-${{ number_format($invoice->discount_amount, 2) }}</td></tr>@endif
-                @if($invoice->tax_amount > 0)<tr class="totals-row"><td>Tax ({{ $invoice->tax_rate }}%)</td><td style="text-align: right;">${{ number_format($invoice->tax_amount, 2) }}</td></tr>@endif
-                <tr class="totals-row total"><td>Total</td><td style="text-align: right;">${{ number_format($invoice->total, 2) }} {{ $invoice->currency }}</td></tr>
-                @if($invoice->amount_paid > 0)<tr class="totals-row"><td>Paid</td><td style="text-align: right;">-${{ number_format($invoice->amount_paid, 2) }}</td></tr>@endif
-                @if($invoice->amount_due > 0)<tr class="totals-row due"><td>Amount Due</td><td style="text-align: right;">${{ number_format($invoice->amount_due, 2) }} {{ $invoice->currency }}</td></tr>@endif
+                <tr class="totals-row"><td>Subtotal</td><td style="text-align: right;">R{{ number_format($invoice->subtotal, 2) }}</td></tr>
+                @if($invoice->discount_amount > 0)<tr class="totals-row"><td>Discount</td><td style="text-align: right;">-R{{ number_format($invoice->discount_amount, 2) }}</td></tr>@endif
+                @if($invoice->tax_amount > 0)<tr class="totals-row"><td>Tax ({{ $invoice->tax_rate }}%)</td><td style="text-align: right;">R{{ number_format($invoice->tax_amount, 2) }}</td></tr>@endif
+                <tr class="totals-row total"><td>Total</td><td style="text-align: right;">R{{ number_format($invoice->total, 2) }} {{ $invoice->currency }}</td></tr>
+                @if($invoice->amount_paid > 0)<tr class="totals-row"><td>Paid</td><td style="text-align: right;">-R{{ number_format($invoice->amount_paid, 2) }}</td></tr>@endif
+                @if($invoice->amount_due > 0)<tr class="totals-row due"><td>Amount Due</td><td style="text-align: right;">R{{ number_format($invoice->amount_due, 2) }} {{ $invoice->currency }}</td></tr>@endif
             </table>
         </div>
 

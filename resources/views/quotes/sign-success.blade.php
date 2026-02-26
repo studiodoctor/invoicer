@@ -30,7 +30,7 @@
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-sm text-gray-500">Total Amount</dt>
-                        <dd class="text-sm font-medium text-gray-900">${{ number_format($quote->total, 2) }}</dd>
+                        <dd class="text-sm font-medium text-gray-900">R{{ number_format($quote->total, 2) }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-sm text-gray-500">Signed By</dt>

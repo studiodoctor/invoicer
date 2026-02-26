@@ -69,11 +69,11 @@
                     <dl class="space-y-3">
                         <div class="flex justify-between">
                             <dt class="text-sm text-gray-500">Total Revenue</dt>
-                            <dd class="text-sm font-medium text-gray-900">${{ number_format($client->total_revenue, 2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">R{{ number_format($client->total_revenue, 2) }}</dd>
                         </div>
                         <div class="flex justify-between">
                             <dt class="text-sm text-gray-500">Outstanding</dt>
-                            <dd class="text-sm font-medium text-gray-900">${{ number_format($client->outstanding_balance, 2) }}</dd>
+                            <dd class="text-sm font-medium text-gray-900">R{{ number_format($client->outstanding_balance, 2) }}</dd>
                         </div>
                     </dl>
                 </div>
@@ -94,7 +94,7 @@
                                 <p class="text-sm text-gray-500">{{ $invoice->issue_date->format('M d, Y') }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-sm font-medium text-gray-900">${{ number_format($invoice->total, 2) }}</p>
+                                <p class="text-sm font-medium text-gray-900">R{{ number_format($invoice->total, 2) }}</p>
                                 @include('components.status-badge', ['status' => $invoice->status])
                             </div>
                         </li>
@@ -119,7 +119,7 @@
                                 <p class="text-sm text-gray-500">{{ $quote->issue_date->format('M d, Y') }}</p>
                             </div>
                             <div class="text-right">
-                                <p class="text-sm font-medium text-gray-900">${{ number_format($quote->total, 2) }}</p>
+                                <p class="text-sm font-medium text-gray-900">R{{ number_format($quote->total, 2) }}</p>
                                 @include('components.status-badge', ['status' => $quote->status])
                             </div>
                         </li>

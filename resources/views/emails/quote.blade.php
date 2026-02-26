@@ -26,7 +26,7 @@
                 <tr><td style="padding: 8px 0; color: #6b7280;">Quote Number:</td><td style="text-align: right;"><strong>{{ $quote->quote_number }}</strong></td></tr>
                 <tr><td style="padding: 8px 0; color: #6b7280;">Issue Date:</td><td style="text-align: right;">{{ $quote->issue_date->format('M d, Y') }}</td></tr>
                 <tr><td style="padding: 8px 0; color: #6b7280;">Valid Until:</td><td style="text-align: right;">{{ $quote->expiry_date->format('M d, Y') }}</td></tr>
-                <tr><td style="padding: 8px 0; color: #6b7280;">Total:</td><td style="text-align: right;"><strong style="font-size: 18px; color: #0284c7;">${{ number_format($quote->total, 2) }}</strong></td></tr>
+                <tr><td style="padding: 8px 0; color: #6b7280;">Total:</td><td style="text-align: right;"><strong style="font-size: 18px; color: #0284c7;">R{{ number_format($quote->total, 2) }}</strong></td></tr>
             </table>
         </div>
 

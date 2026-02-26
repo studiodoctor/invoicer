@@ -82,9 +82,9 @@
                         @endif
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900 text-right font-medium">
-                        ${{ number_format($invoice->total, 2) }}
+                        R{{ number_format($invoice->total, 2) }}
                         @if($invoice->amount_paid > 0 && $invoice->amount_due > 0)
-                        <div class="text-xs text-gray-500">${{ number_format($invoice->amount_due, 2) }} due</div>
+                        <div class="text-xs text-gray-500">R{{ number_format($invoice->amount_due, 2) }} due</div>
                         @endif
                     </td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm">@include('components.status-badge', ['status' => $invoice->status])</td>

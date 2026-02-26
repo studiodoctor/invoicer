@@ -42,8 +42,8 @@
                             <tr class="border-b border-gray-100">
                                 <td class="py-4 text-sm text-gray-900">{{ $item->description }}</td>
                                 <td class="py-4 text-right text-sm text-gray-500">{{ number_format($item->quantity, 2) }}</td>
-                                <td class="py-4 text-right text-sm text-gray-500">${{ number_format($item->unit_price, 2) }}</td>
-                                <td class="py-4 text-right text-sm font-medium text-gray-900">${{ number_format($item->total, 2) }}</td>
+                                <td class="py-4 text-right text-sm text-gray-500">R{{ number_format($item->unit_price, 2) }}</td>
+                                <td class="py-4 text-right text-sm font-medium text-gray-900">R{{ number_format($item->total, 2) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -51,11 +51,11 @@
 
                     <div class="flex justify-end">
                         <div class="w-64 space-y-2">
-                            <div class="flex justify-between text-sm"><span class="text-gray-500">Subtotal</span><span>${{ number_format($quote->subtotal, 2) }}</span></div>
+                            <div class="flex justify-between text-sm"><span class="text-gray-500">Subtotal</span><span>R{{ number_format($quote->subtotal, 2) }}</span></div>
                             @if($quote->tax_amount > 0)
-                            <div class="flex justify-between text-sm"><span class="text-gray-500">Tax ({{ $quote->tax_rate }}%)</span><span>${{ number_format($quote->tax_amount, 2) }}</span></div>
+                            <div class="flex justify-between text-sm"><span class="text-gray-500">Tax ({{ $quote->tax_rate }}%)</span><span>R{{ number_format($quote->tax_amount, 2) }}</span></div>
                             @endif
-                            <div class="flex justify-between text-lg font-semibold border-t pt-2"><span>Total</span><span>${{ number_format($quote->total, 2) }} {{ $quote->currency }}</span></div>
+                            <div class="flex justify-between text-lg font-semibold border-t pt-2"><span>Total</span><span>R{{ number_format($quote->total, 2) }} {{ $quote->currency }}</span></div>
                         </div>
                     </div>
 

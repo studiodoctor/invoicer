@@ -85,8 +85,8 @@
                 <tr>
                     <td><div style="font-weight: 500;">{{ $item->description }}</div></td>
                     <td style="text-align: center;">{{ number_format($item->quantity, 2) }}</td>
-                    <td style="text-align: right;">${{ number_format($item->unit_price, 2) }}</td>
-                    <td style="text-align: right; font-weight: 500;">${{ number_format($item->total, 2) }}</td>
+                    <td style="text-align: right;">R{{ number_format($item->unit_price, 2) }}</td>
+                    <td style="text-align: right; font-weight: 500;">R{{ number_format($item->total, 2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -94,9 +94,9 @@
 
         <div class="totals">
             <table style="width: 100%;">
-                <tr class="totals-row"><td>Subtotal</td><td style="text-align: right;">${{ number_format($quote->subtotal, 2) }}</td></tr>
-                @if($quote->tax_amount > 0)<tr class="totals-row"><td>Tax ({{ $quote->tax_rate }}%)</td><td style="text-align: right;">${{ number_format($quote->tax_amount, 2) }}</td></tr>@endif
-                <tr class="totals-row total"><td>Total</td><td style="text-align: right;">${{ number_format($quote->total, 2) }} {{ $quote->currency }}</td></tr>
+                <tr class="totals-row"><td>Subtotal</td><td style="text-align: right;">R{{ number_format($quote->subtotal, 2) }}</td></tr>
+                @if($quote->tax_amount > 0)<tr class="totals-row"><td>Tax ({{ $quote->tax_rate }}%)</td><td style="text-align: right;">R{{ number_format($quote->tax_amount, 2) }}</td></tr>@endif
+                <tr class="totals-row total"><td>Total</td><td style="text-align: right;">R{{ number_format($quote->total, 2) }} {{ $quote->currency }}</td></tr>
             </table>
         </div>
 
