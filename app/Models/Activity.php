@@ -37,10 +37,19 @@ class Activity extends Model
         Model $subject,
         string $type,
         string $description,
-        array $properties = []
+        array $properties = [],
+        ?int $userId = null
     ): self {
+        // Try to get user_id from auth, then from subject, then use provided userId
+        $resolvedUserId = $userId ?? auth()->id();
+        
+        // If still null and subject has user_id, use that
+        if ($resolvedUserId === null && isset($subject->user_id)) {
+            $resolvedUserId = $subject->user_id;
+        }
+
         return static::create([
-            'user_id' => auth()->id(),
+            'user_id' => $resolvedUserId,
             'subject_type' => get_class($subject),
             'subject_id' => $subject->id,
             'type' => $type,

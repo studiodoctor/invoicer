@@ -47,57 +47,68 @@ class DashboardService
 
     public function getTotalRevenue(): float
     {
-        return Invoice::where('user_id', $this->userId)
-            ->where('status', InvoiceStatus::PAID)
+        return (float) Invoice::where('user_id', $this->userId)
+            ->where('status', InvoiceStatus::PAID->value)
             ->sum('total');
     }
 
     public function getPendingInvoices(): array
     {
         $invoices = Invoice::where('user_id', $this->userId)
-            ->whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::VIEWED, InvoiceStatus::PARTIAL])
+            ->whereIn('status', [
+                InvoiceStatus::SENT->value,
+                InvoiceStatus::VIEWED->value,
+                InvoiceStatus::PARTIAL->value
+            ])
             ->get();
 
         return [
             'count' => $invoices->count(),
-            'total' => $invoices->sum('amount_due'),
+            'total' => (float) $invoices->sum('amount_due'),
         ];
     }
 
     public function getOverdueInvoices(): array
     {
         $invoices = Invoice::where('user_id', $this->userId)
-            ->where('status', InvoiceStatus::OVERDUE)
+            ->where('status', InvoiceStatus::OVERDUE->value)
             ->get();
 
         return [
             'count' => $invoices->count(),
-            'total' => $invoices->sum('amount_due'),
+            'total' => (float) $invoices->sum('amount_due'),
         ];
     }
 
     public function getPendingQuotes(): array
     {
         $quotes = Quote::where('user_id', $this->userId)
-            ->whereIn('status', [QuoteStatus::SENT, QuoteStatus::VIEWED])
+            ->whereIn('status', [
+                QuoteStatus::SENT->value,
+                QuoteStatus::VIEWED->value
+            ])
             ->get();
 
         return [
             'count' => $quotes->count(),
-            'total' => $quotes->sum('total'),
+            'total' => (float) $quotes->sum('total'),
         ];
     }
 
     public function getQuoteConversionRate(): float
     {
         $totalQuotes = Quote::where('user_id', $this->userId)->count();
-        $convertedQuotes = Quote::where('user_id', $this->userId)
-            ->whereIn('status', [QuoteStatus::SIGNED, QuoteStatus::CONVERTED])
-            ->count();
-
+        
         if ($totalQuotes === 0) {
             return 0;
         }
+
+        $convertedQuotes = Quote::where('user_id', $this->userId)
+            ->whereIn('status', [
+                QuoteStatus::SIGNED->value,
+                QuoteStatus::CONVERTED->value
+            ])
+            ->count();
 
         return round(($convertedQuotes / $totalQuotes) * 100, 1);
     }
@@ -105,7 +116,7 @@ class DashboardService
     public function getRevenueChart(int $months = 12): array
     {
         $data = Invoice::where('user_id', $this->userId)
-            ->where('status', InvoiceStatus::PAID)
+            ->where('status', InvoiceStatus::PAID->value)
             ->where('paid_at', '>=', now()->subMonths($months))
             ->selectRaw('DATE_FORMAT(paid_at, "%Y-%m") as month, SUM(total) as revenue')
             ->groupBy('month')
@@ -133,14 +144,25 @@ class DashboardService
         $statuses = Invoice::where('user_id', $this->userId)
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
-            ->get()
-            ->pluck('count', 'status')
-            ->toArray();
+            ->get();
+
+        $labels = [];
+        $data = [];
+        $colors = [];
+
+        foreach ($statuses as $status) {
+            $statusEnum = InvoiceStatus::tryFrom($status->status);
+            if ($statusEnum) {
+                $labels[] = $statusEnum->label();
+                $data[] = (int) $status->count;
+                $colors[] = $this->getStatusColor($statusEnum->color());
+            }
+        }
 
         return [
-            'labels' => array_map(fn($s) => InvoiceStatus::from($s)->label(), array_keys($statuses)),
-            'data' => array_values($statuses),
-            'colors' => array_map(fn($s) => $this->getStatusColor(InvoiceStatus::from($s)->color()), array_keys($statuses)),
+            'labels' => $labels,
+            'data' => $data,
+            'colors' => $colors,
         ];
     }
 
@@ -149,14 +171,25 @@ class DashboardService
         $statuses = Quote::where('user_id', $this->userId)
             ->selectRaw('status, COUNT(*) as count')
             ->groupBy('status')
-            ->get()
-            ->pluck('count', 'status')
-            ->toArray();
+            ->get();
+
+        $labels = [];
+        $data = [];
+        $colors = [];
+
+        foreach ($statuses as $status) {
+            $statusEnum = QuoteStatus::tryFrom($status->status);
+            if ($statusEnum) {
+                $labels[] = $statusEnum->label();
+                $data[] = (int) $status->count;
+                $colors[] = $this->getStatusColor($statusEnum->color());
+            }
+        }
 
         return [
-            'labels' => array_map(fn($s) => QuoteStatus::from($s)->label(), array_keys($statuses)),
-            'data' => array_values($statuses),
-            'colors' => array_map(fn($s) => $this->getStatusColor(QuoteStatus::from($s)->color()), array_keys($statuses)),
+            'labels' => $labels,
+            'data' => $data,
+            'colors' => $colors,
         ];
     }
 
@@ -182,9 +215,9 @@ class DashboardService
     {
         return Client::where('user_id', $this->userId)
             ->withSum(['invoices as total_revenue' => function ($query) {
-                $query->where('status', InvoiceStatus::PAID);
+                $query->where('status', InvoiceStatus::PAID->value);
             }], 'total')
-            ->orderBy('total_revenue', 'desc')
+            ->orderByDesc('total_revenue')
             ->limit($limit)
             ->get();
     }
