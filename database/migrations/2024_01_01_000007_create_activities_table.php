@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // morphs() already creates an index automatically
             $table->morphs('subject');
             $table->string('type');
             $table->string('description');
@@ -19,8 +20,10 @@ return new class extends Migration
             $table->text('user_agent')->nullable();
             $table->timestamps();
 
+            // Only add the user_id index - morphs already handles subject index
             $table->index(['user_id', 'created_at']);
-            $table->index(['subject_type', 'subject_id']);
+            // Remove this line - it's duplicate:
+            // $table->index(['subject_type', 'subject_id']);
         });
     }
 
